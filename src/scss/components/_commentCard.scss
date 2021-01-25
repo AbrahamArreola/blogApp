@@ -1,0 +1,63 @@
+body {
+    .comments-display {
+        width: 65%;
+        margin: 0 auto;
+        padding: 20px 0;
+
+        .bordered {
+            border: solid 1px #000;
+        }
+
+        .comment-item {
+            background-color: $forum-pink;
+            padding: 10px 30px;
+            margin: 15px 0;
+            border-radius: 10px;
+
+            .comment-info {
+                border-bottom: solid 1px #000;
+
+                .user-info {
+                    display: inline-block;
+                }
+
+                .comment-options {
+                    float: right;
+
+                    i {
+                        cursor: pointer;
+                        font-size: 15px;
+                        margin: 0 5px;
+
+                        &:nth-child(1) {
+                            color: #64B0F0;
+                        }
+
+                        &:nth-child(2) {
+                            color: $forum-error;
+                        }
+                    }
+                }
+            }
+
+            .comment-edit {
+                textarea {
+                    width: 100%;
+                    height: 100px;
+                    resize: none;
+                }
+
+                button{
+                    height: 30px;
+                    padding: 0 10px;
+                    margin-right: 8px;
+                }
+            }
+
+            p {
+                margin: 8px 0;
+                word-wrap: break-word;
+            }
+        }
+    }
+}

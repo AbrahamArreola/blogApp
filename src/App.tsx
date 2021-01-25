@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { createContext } from "react";
+import { SWRConfig } from "swr";
+import { Forum } from "./components/Forum";
+import "./scss/styles.scss";
+
+const fetcher = (
+    ...args: [input: RequestInfo, init?: RequestInit | undefined]
+) => fetch(...args).then((response) => response.json());
+
+const urls = {
+    getUrl: "http://localhost:8000/comments",
+    postUrl: "http://localhost:8000/comments/create",
+    putUrl: "http://localhost:8000/comments/update/",
+    deleteUrl: "http://localhost:8000/comments/delete/"
+}
+
+export const ForumContext = createContext({});
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <ForumContext.Provider value={urls}>
+            <SWRConfig value={{ fetcher }}>
+                <Forum />
+            </SWRConfig>
+        </ForumContext.Provider>
+    );
 }
 
 export default App;
