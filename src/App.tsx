@@ -10,9 +10,10 @@ const fetcher = (
 const urls = {
     getUrl: "http://localhost:8000/comments",
     postUrl: "http://localhost:8000/comments/create",
+    postReplyUrl: "http://localhost:8000/replies/create",
     putUrl: "http://localhost:8000/comments/update/",
-    deleteUrl: "http://localhost:8000/comments/delete/"
-}
+    deleteUrl: "http://localhost:8000/comments/delete/",
+};
 
 export const ForumContext = createContext({});
 

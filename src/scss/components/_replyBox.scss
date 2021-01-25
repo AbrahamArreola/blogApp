@@ -1,0 +1,49 @@
+body {
+    .reply-box {
+        .reply-shadow-screen {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            height: 75%;
+            background-color: #000;
+            filter: opacity(.7);
+        }
+
+        .reply-section {
+            position: fixed;
+            width: 100%;
+            height: 25%;
+            bottom: 0;
+            background-color: $forum-background;
+            padding: 10px 17vw;
+
+            p {
+                margin: 0 0 10px 10px;
+            }
+
+            textarea {
+                width: 100%;
+                resize: none;
+                border-radius: 10px;
+                padding: 5px 20px;
+                margin-bottom: 10px;
+
+                &:focus {
+                    outline: none;
+                }
+            }
+
+            button {
+                height: 30px;
+                padding: 0 10px;
+                margin-right: 8px;
+            }
+
+            span{
+                margin-left: 5px;
+                color: $forum-error;
+            }
+        }
+    }
+}

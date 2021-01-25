@@ -4,11 +4,13 @@ import useSWR, { mutate } from "swr";
 import { CommentCard } from "./CommentCard";
 import { ForumContext } from "../App";
 import { LoadingScreen } from "./LoadingScreen";
+import { ReplyBox } from "./ReplyBox";
+import errorImage from "../images/error.jpg";
 
 const ENTER = "Enter";
 
 export const Forum = () => {
-    const {getUrl, postUrl} : any = useContext(ForumContext);
+    const { getUrl, postUrl }: any = useContext(ForumContext);
 
     const { error, data } = useSWR(getUrl);
 
@@ -17,6 +19,10 @@ export const Forum = () => {
     const [comment, setComment] = useState("");
     const [fieldError, setFieldError] = useState("");
     const [updatingComments, setUpdatingComments] = useState(false);
+    const [showReply, setShowReply] = useState(false);
+    const [replyData, setReplyData] = useState({});
+
+    const [emailLogged, setEmailLogged] = useState("");
 
     const handleEnter = (e: KeyboardEvent) => {
         if (e.key === ENTER && !e.shiftKey) {
@@ -31,6 +37,7 @@ export const Forum = () => {
                 setFieldError("Email is required");
             } else {
                 setLogged(true);
+                setEmailLogged(email);
             }
         } else {
             makeComment();
@@ -60,7 +67,18 @@ export const Forum = () => {
         }
     };
 
-    if (error) return <h1>Something went wrong!</h1>;
+    const replyComment = (data: any) => {
+        setReplyData(data);
+        setShowReply(true);
+    };
+
+    if (error) return(
+        <div className="data-error">
+            <h1>Something went wrong!</h1>
+            <p>Some trouble may be happening with the web server, reload or come back later.</p>
+            <img src={errorImage} alt="Error, server doesn't respond"/>
+        </div>
+    );
 
     return (
         <div>
@@ -99,10 +117,19 @@ export const Forum = () => {
                 </div>
                 <div className="comments-display">
                     {data?.comments?.map((comment: any) => (
-                        <CommentCard key={comment.id} data={comment} />
+                        <CommentCard
+                            key={comment.id}
+                            data={comment}
+                            reply={replyComment}
+                        />
                     ))}
                 </div>
             </div>
+            {showReply ? (
+                <ReplyBox data={replyData} hide={() => setShowReply(false)} emailLogged={emailLogged}/>
+            ) : (
+                ""
+            )}
         </div>
     );
 };

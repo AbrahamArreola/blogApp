@@ -1,10 +1,12 @@
 import axios from "axios";
-import React, { useContext, useState } from "react";
-import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
+import React, { Fragment, useContext, useState } from "react";
+import { Button } from "react-bootstrap";
+import ReactTooltip from "react-tooltip";
 import { mutate } from "swr";
 import { ForumContext } from "../App";
+import { ReplyCard } from "./ReplyCard";
 
-export const CommentCard = ({ data }: any) => {
+export const CommentCard = ({ data, reply, currentEmail }: any) => {
     const { getUrl, putUrl, deleteUrl }: any = useContext(ForumContext);
 
     const [onEdit, setOnEdit] = useState(false);
@@ -43,51 +45,65 @@ export const CommentCard = ({ data }: any) => {
     };
 
     return (
-        <div className="comment-item animate__animated animate__fadeInLeft">
-            <div className="comment-info">
-                <div className="user-info">
-                    <i className="fas fa-user"></i>
-                    <span> {data.user_email}</span>
+        <Fragment>
+            <div className="comment-item animate__animated animate__fadeInLeft">
+                <div className="comment-info">
+                    <div className="user-info">
+                        <i className="fas fa-user"></i>
+                        <span> {data.user_email}</span>
+                    </div>
+                    <div className="comment-options">
+                        <i
+                            className="fas fa-reply"
+                            data-tip
+                            data-for="reply-tip"
+                            onClick={() => reply(data)}
+                        ></i>
+                        <ReactTooltip id="reply-tip" place="top">
+                            Reply
+                        </ReactTooltip>
+
+                        <i
+                            className="fas fa-edit"
+                            data-tip
+                            data-for="update-tip"
+                            onClick={handleEdit}
+                        ></i>
+                        <ReactTooltip id="update-tip" place="top">
+                            Update
+                        </ReactTooltip>
+
+                        <i
+                            className="fas fa-trash"
+                            data-tip
+                            data-for="delete-tip"
+                            onClick={deleteComment}
+                        ></i>
+                        <ReactTooltip id="delete-tip" place="top">
+                            Delete
+                        </ReactTooltip>
+                    </div>
                 </div>
-                <div className="comment-options">
-                    <OverlayTrigger
-                        placement="top"
-                        overlay={
-                            <Tooltip id="update-tooltip">
-                                Update comment
-                            </Tooltip>
-                        }
-                    >
-                        <i className="fas fa-edit" onClick={handleEdit}></i>
-                    </OverlayTrigger>
-                    <OverlayTrigger
-                        placement="top"
-                        overlay={
-                            <Tooltip id="update-tooltip">
-                                Delete comment
-                            </Tooltip>
-                        }
-                    >
-                        <i className="fas fa-trash" onClick={deleteComment}></i>
-                    </OverlayTrigger>
-                </div>
+                {onEdit ? (
+                    <div className="comment-edit">
+                        <textarea
+                            value={text}
+                            onChange={(e) => setText(e.target.value)}
+                        ></textarea>
+                        <Button variant="primary" onClick={updateComment}>
+                            Update
+                        </Button>
+                        <Button variant="secondary" onClick={handleCancel}>
+                            Cancel
+                        </Button>
+                    </div>
+                ) : (
+                    <p>{data.content}</p>
+                )}
             </div>
-            {onEdit ? (
-                <div className="comment-edit">
-                    <textarea
-                        value={text}
-                        onChange={(e) => setText(e.target.value)}
-                    ></textarea>
-                    <Button variant="primary" onClick={updateComment}>
-                        Update
-                    </Button>
-                    <Button variant="secondary" onClick={handleCancel}>
-                        Cancel
-                    </Button>
-                </div>
-            ) : (
-                <p>{data.content}</p>
-            )}
-        </div>
+            {data?.replies.map((reply: any) => (
+                <ReplyCard key={reply.id} data={reply} />
+            ))}
+        </Fragment>
     );
 };
