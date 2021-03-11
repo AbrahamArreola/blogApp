@@ -3,9 +3,10 @@ import React, { useContext, useState } from "react";
 import { Button } from "react-bootstrap";
 import { mutate } from "swr";
 import { ForumContext } from "../App";
+import { IReplyBox, IUrls } from "../helpers/interfaces";
 
-export const ReplyBox = ({ data, hide, emailLogged }: any) => {
-    const { getUrl, postReplyUrl }: any = useContext(ForumContext);
+export const ReplyBox = ({ data, hide, emailLogged }: IReplyBox) => {
+    const { getUrl, postReplyUrl }: IUrls = useContext(ForumContext);
 
     const [reply, setReply] = useState("");
     const [error, setError] = useState("");

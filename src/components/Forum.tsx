@@ -6,11 +6,12 @@ import { ForumContext } from "../App";
 import { LoadingScreen } from "./LoadingScreen";
 import { ReplyBox } from "./ReplyBox";
 import errorImage from "../images/error.jpg";
+import { IComment, IReply, IUrls } from "../helpers/interfaces";
 
 const ENTER = "Enter";
 
 export const Forum = () => {
-    const { getUrl, postUrl }: any = useContext(ForumContext);
+    const { getUrl, postUrl }: IUrls = useContext(ForumContext);
 
     const { error, data } = useSWR(getUrl);
 
@@ -20,7 +21,7 @@ export const Forum = () => {
     const [fieldError, setFieldError] = useState("");
     const [updatingComments, setUpdatingComments] = useState(false);
     const [showReply, setShowReply] = useState(false);
-    const [replyData, setReplyData] = useState({});
+    const [replyData, setReplyData] = useState<IReply>({id: 0, user_email: "", content: ""});
 
     const [emailLogged, setEmailLogged] = useState("");
 
@@ -67,7 +68,7 @@ export const Forum = () => {
         }
     };
 
-    const replyComment = (data: any) => {
+    const replyComment = (data: IComment) : void => {
         setReplyData(data);
         setShowReply(true);
     };
@@ -116,11 +117,11 @@ export const Forum = () => {
                     </button>
                 </div>
                 <div className="comments-display">
-                    {data?.comments?.map((comment: any) => (
+                    {data?.comments?.map((comment: IComment) => (
                         <CommentCard
                             key={comment.id}
                             data={comment}
-                            reply={replyComment}
+                            replyComment={replyComment}
                         />
                     ))}
                 </div>

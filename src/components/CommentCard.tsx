@@ -4,10 +4,11 @@ import { Button } from "react-bootstrap";
 import ReactTooltip from "react-tooltip";
 import { mutate } from "swr";
 import { ForumContext } from "../App";
+import { ICommentCard, IReply, IUrls } from "../helpers/interfaces";
 import { ReplyCard } from "./ReplyCard";
 
-export const CommentCard = ({ data, reply, currentEmail }: any) => {
-    const { getUrl, putUrl, deleteUrl }: any = useContext(ForumContext);
+export const CommentCard = ({ data, replyComment }: ICommentCard) => {
+    const { getUrl, putUrl, deleteUrl }: IUrls = useContext(ForumContext);
 
     const [onEdit, setOnEdit] = useState(false);
     const [text, setText] = useState(data.content);
@@ -27,7 +28,6 @@ export const CommentCard = ({ data, reply, currentEmail }: any) => {
     const updateComment = async () => {
         try {
             data.content = text;
-            console.log(data);
             await axios.put(`${putUrl}${data.id}`, data);
             setOnEdit(false);
         } catch (error) {
@@ -57,7 +57,7 @@ export const CommentCard = ({ data, reply, currentEmail }: any) => {
                             className="fas fa-reply"
                             data-tip
                             data-for="reply-tip"
-                            onClick={() => reply(data)}
+                            onClick={() => replyComment(data)}
                         ></i>
                         <ReactTooltip id="reply-tip" place="top">
                             Reply
@@ -101,7 +101,7 @@ export const CommentCard = ({ data, reply, currentEmail }: any) => {
                     <p>{data.content}</p>
                 )}
             </div>
-            {data?.replies.map((reply: any) => (
+            {data?.replies.map((reply: IReply) => (
                 <ReplyCard key={reply.id} data={reply} />
             ))}
         </Fragment>

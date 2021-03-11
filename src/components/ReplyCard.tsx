@@ -1,6 +1,7 @@
 import React from "react";
+import { IReplyCard } from "../helpers/interfaces";
 
-export const ReplyCard = ({data} : any) => {
+export const ReplyCard = ({data} : IReplyCard) => {
     return (
         <div className="reply-item comment-item animate__animated animate__fadeInLeft">
             <div className="comment-info">
